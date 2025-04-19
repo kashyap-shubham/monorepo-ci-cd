@@ -8,10 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploying everything to the staging cluster
     steps:
-      - run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
-          echo "${{ secrets.DEV_SSH_SERVER }}" &> ~/ssh_host 
-          mkdir -p /home/runner/.ssh
-          ls /home/runner/.ssh
-          chmod 700 /home/runner/ssh_key
-          ssh -i ~/ssh_key root@139.59.76.225 -t "cd nonorepo-ci-cd/ && git pull origin main && export PATH=/root/.nvm/versions/node/v22.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin && npm install -g pnpm && pnpm install && pnpm run build && pm2 restart fe-sever && pm2 restart http-sever && pm2 restart ws-sever"
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
+          port: 22
+          script: ~/monorepo_ci_cd/scrpts/deploy.sh
