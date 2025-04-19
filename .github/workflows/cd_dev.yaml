@@ -15,4 +15,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PRIVATE_SSH_KEY }}
           port: 22
-          script: ~/monorepo_ci_cd/scrpts/deploy.sh
+          script: ~/monorepo_ci_cd/scrpts/dev_deploy.sh
