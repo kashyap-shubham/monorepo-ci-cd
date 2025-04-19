@@ -10,9 +10,9 @@ jobs:
     name: Deploying the fronted to staging
     steps: 
       - run: |
-          echo {{ secrets.DEV_SSH_server }}
+          echo ${{ secrets.DEV_SSH_server }}
           echo " doing ssh in dev server "
-          ssh -i {{ secrets.SSH_PRIVATE_KEY }} root@{{ secrets.DEV_SSH_SERVER }}
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} root@${{ secrets.DEV_SSH_SERVER }}
           echo "into dev server"
 
 
