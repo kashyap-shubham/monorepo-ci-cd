@@ -7,11 +7,8 @@ jobs:
   redeploy_everything:
     runs-on: ubuntu-latest
     name: Deploying everything to the staging cluster
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
-        
-      - name: executing remote ssh commands using password
+    steps:  
+      - name: executing remote ssh commands using ssh_key
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.DEV_HOST }}
