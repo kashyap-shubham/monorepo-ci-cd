@@ -1,0 +1,18 @@
+name: Deploy to staging
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  redeploy_everything:
+    runs-on: ubuntu-latest
+    name: Deploying everything to the prod cluster
+    steps:  
+      - name: executing remote ssh commands using ssh_key
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
+          port: 22
+          script: ~/monorepo_ci_cd/scrpts/deploy.sh
