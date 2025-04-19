@@ -1,21 +1,17 @@
 name: Deploy to staging
 on:
   push:
-    branch:
-      - [ main ]
+    branches: [ main ]
 
 jobs:
   redeploy_everything:
     runs-on: ubuntu-latest
-    name: Deploying the fronted to staging
-    steps: 
+    name: Deploying everything to the staging cluster
+    steps:
       - run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
+          echo "${{ secrets.DEV_SSH_SERVER }}" &> ~/ssh_host 
           mkdir -p /home/runner/.ssh
           ls /home/runner/.ssh
-          echo "${{ secrets.DEV_SSH_SERVER }}"
-          echo " doing ssh in dev server "
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} root@${{ secrets.DEV_SSH_SERVER }}
-          echo "into dev server"
-
-
+          chmod 700 /home/runner/ssh_key
+          ssh -i ~/ssh_key root@~/ssh_host -t "cd nonorepo-ci-cd/ && git pull origin main && export PATH=/root/.nvm/versions/node/v22.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin && npm install -g pnpm && pnpm install && pnpm run build && pm2 restart fe-sever && pm2 restart http-sever && pm2 restart ws-sever"
