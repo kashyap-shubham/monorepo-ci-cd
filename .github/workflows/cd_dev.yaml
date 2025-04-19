@@ -1,0 +1,17 @@
+name: Deploy to staging
+on:
+  push:
+    branch:
+      - "main"
+
+jobs:
+  redeploy_everything:
+    name: Deploying the fronted to staging
+
+    steps:
+      - name: SSH Into the DEV # https://kubernetes.io/docs/concepts/services-networking/service/
+      - run: |
+          ssh -i {{secrets.SSH_PRIVATE_KEY}} root@{{secrets.DEV_SERVER}}
+          echo "into the dev server"
+
+
